@@ -1,5 +1,5 @@
 import  request from "supertest";
-import { app } from "../../src";
+import { app } from "../../src/index1";
 
 describe('/videos', () => {
     beforeAll(async() => {
@@ -92,7 +92,7 @@ describe('/videos', () => {
         .get('/videos' + createdVideo2.id)
         .expect(200, createdVideo2)
         })
-        it(`should delete both video`, async () => {
+    it(`should delete both video`, async () => {
             await request(app)
             .delete(`/videos/` + createdVideo.id)
             .expect(204)
