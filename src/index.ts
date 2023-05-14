@@ -77,8 +77,8 @@ app.get('/videos', (req: Request, res: Response) => {
 app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  //if (!videoId) { return res.sendStatus(404)}
-  return res.status(200).send({videoId})
+  if (!videoId) { return res.status(404).send(db.videos) }
+  return res.status(200).send({db})
 })
 
 app.post('/videos', (req: Request, res: Response) => {
