@@ -29,7 +29,7 @@ export type videoType = {
   id: number,
   title: string,
   author: string,
-  canBeDownloaded: boolean, //default = false
+  canBeDownloaded: false, //default = false
   minAgeRestriction: null | number, // default = null
   createdAt: string,
   publicationDate: string,
@@ -76,12 +76,13 @@ app.get('/videos', (req: Request, res: Response) => {
 
 app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
-  const video = db.videos.find(video => video.id === videoId)
+  const videos = db.videos.find(video => video.id === videoId)
   if (!videoId) { 
     res.status(404).send(db.videos) 
       return
     }
-  return res.status(200).send({video})
+   res.status(200).send(videos)
+   return
 })
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -95,7 +96,7 @@ app.post('/videos', (req: Request, res: Response) => {
     if (!author || typeof author !== 'string' || author.trim() || author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
-    /*if (Array.isArray(availableResolutions)) {
+    if (Array.isArray(availableResolutions)) {
       const length = availableResolutions.length
       let resVal = availableResolutions.filter((value: string) => {
         return availableResolutions.includes(value)
@@ -103,7 +104,7 @@ app.post('/videos', (req: Request, res: Response) => {
       if (resVal.length < length) {
         errors.push({message: 'error at resolutions', field: 'resolutions'})
       }
-      */
+     
   
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
@@ -118,13 +119,16 @@ app.post('/videos', (req: Request, res: Response) => {
     }
     db.videos.push(newVideo)
     res.status(201).send(newVideo)
-  })
+  }
 
 app.put('/videos/:id', (req: Request, res: Response) => {
   
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
-    if (!video) return res.sendStatus(404)
+    if (!video) {
+      res.sendStatus(404) 
+      return 
+    }
     video.author = req.body.author
     video.title = req.body.title
     video.canBeDownloaded = req.body.canBeDownloaded
@@ -141,27 +145,23 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
   if (!video.author || typeof video.author !== 'string' || video.author.length > 20) {
     errors2.push({message: 'error at author', field: 'author'})
   }
-  /*    if (Array.isArray(video.availableResolutions)) {
+      if (Array.isArray(video.availableResolutions)) {
     const length = video.availableResolutions.length
     let resVal = video.availableResolutions.filter((value: string) => {
       return availableResolutions.includes(value)
     })
-    
+  
     if (resVal.length < length) {
       errors2.push({message: 'error at resolutions', field: 'resolutions'})
     }
-    */ 
+  } 
     if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
-    errors2.push({message: 'error ', field: 'filed'})
+    errors2.push({message: 'error ', field: 'field'})
   } else if (typeof video.minAgeRestriction === "number") {
-    if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
-      errors2.push({message: 'error ', filed: 'filed'})
-    }
-    if (video.publicationDate !== "string" ) {
-      errors2.push({message: 'error ', field: 'filed'})
-    }
+     (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18 ||video.publicationDate !== "string") 
+      errors2.push({message: 'error ', field: 'field'})
+     
   }
-
    res.sendStatus(204)
  })
 
@@ -178,5 +178,5 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
-  
-// new Date(date.setDate(date.getDate() + 1)).toISOString()
+})
+// new Date(date.setDate(date.getDate() + 1)).toISOString() 
