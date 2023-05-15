@@ -89,13 +89,13 @@ app.post('/videos', (req: Request, res: Response) => {
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
     const errors = []
-    if (!title && typeof title !== 'string' && title.trim() && title.length > 40) {
+    if (!title || typeof title !== 'string' || title.trim() || title.length > 40) {
        errors.push({message: 'error at title', field: 'title'})
     }
-    if (!author && typeof author !== 'string' && author.trim() && author.length > 20) {
+    if (!author || typeof author !== 'string' || author.trim() || author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
-    if (Array.isArray(availableResolutions)) {
+    /*if (Array.isArray(availableResolutions)) {
       const length = availableResolutions.length
       let resVal = availableResolutions.filter((value: string) => {
         return availableResolutions.includes(value)
@@ -103,7 +103,8 @@ app.post('/videos', (req: Request, res: Response) => {
       if (resVal.length < length) {
         errors.push({message: 'error at resolutions', field: 'resolutions'})
       }
-}   
+      */
+  
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
     const newVideo: videoType = {
       id: +(new Date()),
@@ -140,14 +141,16 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
   if (!video.author || typeof video.author !== 'string' || video.author.length > 20) {
     errors2.push({message: 'error at author', field: 'author'})
   }
-  if (Array.isArray(video.availableResolutions)) {
+  /*    if (Array.isArray(video.availableResolutions)) {
     const length = video.availableResolutions.length
     let resVal = video.availableResolutions.filter((value: string) => {
       return availableResolutions.includes(value)
     })
+    
     if (resVal.length < length) {
       errors2.push({message: 'error at resolutions', field: 'resolutions'})
-    } 
+    }
+    */ 
     if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
     errors2.push({message: 'error ', field: 'filed'})
   } else if (typeof video.minAgeRestriction === "number") {
