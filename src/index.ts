@@ -87,10 +87,10 @@ app.post('/videos', (req: Request, res: Response) => {
     const availableResolutions = req.body.availableResolutions
     const errors = []
     if (!title || typeof title !== 'string' && title.trim() || title.length > 40) {
-       errors.push({message: 'error at title', filed: 'title'})
+       errors.push({message: 'error at title', field: 'title'})
     }
     if (!author || typeof author !== 'string' && author.trim() || author.length > 20) {
-     errors.push({message: 'error at author', filed: 'author'})
+     errors.push({message: 'error at author', field: 'author'})
     }
     if (Array.isArray(availableResolutions)) {
       const length = availableResolutions.length
@@ -98,7 +98,7 @@ app.post('/videos', (req: Request, res: Response) => {
         return availableResolutions.includes(value)
       })
       if (resVal.length < length) {
-        errors.push({message: 'error at resolutions', filed: 'resolutions'})
+        errors.push({message: 'error at resolutions', field: 'resolutions'})
       }
 }   
     if (errors.length > 0) return res.status(400).send({errorsMessages: errors})
@@ -116,7 +116,7 @@ app.post('/videos', (req: Request, res: Response) => {
     res.status(201).send(newVideo)
   })
 
-app.put('/videos/id', (req: Request, res: Response) => {
+app.put('/videos/:id', (req: Request, res: Response) => {
   
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
@@ -132,10 +132,10 @@ app.put('/videos/id', (req: Request, res: Response) => {
     const errors2 = []
 
 if (!video || typeof video.title !== 'string' || video.title.trim() || video.title.length > 40) {
-    errors2.push({message: 'error at title', filed: 'title'})
+    errors2.push({message: 'error at title', field: 'title'})
   }
   if (!video.author || typeof video.author !== 'string' || video.author.length > 20) {
-    errors2.push({message: 'error at author', filed: 'author'})
+    errors2.push({message: 'error at author', field: 'author'})
   }
   if (Array.isArray(video.availableResolutions)) {
     const length = video.availableResolutions.length
@@ -143,16 +143,16 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
       return availableResolutions.includes(value)
     })
     if (resVal.length < length) {
-      errors2.push({message: 'error at resolutions', filed: 'resolutions'})
+      errors2.push({message: 'error at resolutions', field: 'resolutions'})
     } 
     if (video.minAgeRestriction !== null && typeof video.minAgeRestriction !== "number" ) {
-    errors2.push({message: 'error ', filed: 'filed'})
+    errors2.push({message: 'error ', field: 'filed'})
   } else if (typeof video.minAgeRestriction === "number") {
     if (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18) {
       errors2.push({message: 'error ', filed: 'filed'})
     }
     if (video.publicationDate !== "string" ) {
-      errors2.push({message: 'error ', filed: 'filed'})
+      errors2.push({message: 'error ', field: 'filed'})
     }
   }
 
@@ -160,10 +160,10 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
  }
 })
 
-app.delete('/videos/id', (req: Request, res: Response) => {
+app.delete('/videos/:id', (req: Request, res: Response) => {
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
-    if (!video) return res.sendStatus(404)
+    if (!video) { return res.sendStatus(404) }
     db.videos = db.videos.filter(v => v.id !== videoId)
     return res.sendStatus(204)
     })
