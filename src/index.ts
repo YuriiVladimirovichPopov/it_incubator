@@ -163,8 +163,7 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
   }
 
    res.sendStatus(204)
- }
-})
+ })
 
 app.delete('/videos/:id', (req: Request, res: Response) => {
     const videoId = +req.params.id
