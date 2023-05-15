@@ -49,7 +49,7 @@ const db: DB = {
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
-    "publicationDate": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": []
   },
   {
@@ -59,7 +59,7 @@ const db: DB = {
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
-    "publicationDate": new Date().toISOString(),
+    "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
     "availableResolutions": []
   },
 ]
@@ -77,7 +77,10 @@ app.get('/videos', (req: Request, res: Response) => {
 app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const video = db.videos.find(video => video.id === videoId)
-  if (!videoId) { return res.status(404).send(db.videos) }
+  if (!videoId) { 
+    res.status(404).send(db.videos) 
+      return
+    }
   return res.status(200).send({video})
 })
 
@@ -86,10 +89,10 @@ app.post('/videos', (req: Request, res: Response) => {
     const author = req.body.author
     const availableResolutions = req.body.availableResolutions
     const errors = []
-    if (!title || typeof title !== 'string' && title.trim() || title.length > 40) {
+    if (!title && typeof title !== 'string' && title.trim() && title.length > 40) {
        errors.push({message: 'error at title', field: 'title'})
     }
-    if (!author || typeof author !== 'string' && author.trim() || author.length > 20) {
+    if (!author && typeof author !== 'string' && author.trim() && author.length > 20) {
      errors.push({message: 'error at author', field: 'author'})
     }
     if (Array.isArray(availableResolutions)) {
@@ -109,7 +112,7 @@ app.post('/videos', (req: Request, res: Response) => {
       canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
-      publicationDate: today.toISOString(), 
+      publicationDate: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), 
       availableResolutions
     }
     db.videos.push(newVideo)
@@ -163,7 +166,9 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
 app.delete('/videos/:id', (req: Request, res: Response) => {
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
-    if (!video) { return res.sendStatus(404) }
+    if (!video) { 
+      return res.sendStatus(404) 
+    }
     db.videos = db.videos.filter(v => v.id !== videoId)
     return res.sendStatus(204)
     })
@@ -172,3 +177,4 @@ app.delete('/videos/:id', (req: Request, res: Response) => {
     console.log(`Example app listening on port ${port}`)
   })
   
+// new Date(date.setDate(date.getDate() + 1)).toISOString()
