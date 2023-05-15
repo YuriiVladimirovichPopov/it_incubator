@@ -13,8 +13,8 @@ const port = process.env.PORT || 3003
 const today = new Date();
 today.setDate(today.getDate() + 1);
 
-//TODO enum? P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"
-//testing message
+//TODO enum? "P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"
+
 const enum resolutionType {
   P144 = 'P144',
   P240 = 'P240',
@@ -50,17 +50,17 @@ const db: DB = {
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "availableResolutions": []
+    "availableResolutions": ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"]
   },
   {
     "id": 1,
-    "title": "string1",
+    "title": "string1", 
     "author": "string1",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
     "createdAt": new Date().toISOString(),
     "publicationDate": new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
-    "availableResolutions": []
+    "availableResolutions": ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"]
   },
 ]
 }
