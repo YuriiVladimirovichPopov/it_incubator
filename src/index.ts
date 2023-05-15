@@ -78,11 +78,11 @@ app.get('/videos/:id', (req: Request, res: Response) => {
   const videoId = +req.params.id
   const videos = db.videos.find(video => video.id === videoId)
   if (!videoId) { 
-    res.status(404).send(db.videos) 
-      return
+    return res.status(404).send(db.videos) 
+      
     }
-   res.status(200).send(videos)
-   return
+    return res.status(200).send(videos)
+   
 })
 
 app.post('/videos', (req: Request, res: Response) => {
@@ -126,8 +126,7 @@ app.put('/videos/:id', (req: Request, res: Response) => {
     const videoId = +req.params.id
     const video = db.videos.find(video => video.id === videoId)
     if (!video) {
-      res.sendStatus(404) 
-      return 
+      return res.sendStatus(404) 
     }
     video.author = req.body.author
     video.title = req.body.title
@@ -161,8 +160,9 @@ if (!video || typeof video.title !== 'string' || video.title.trim() || video.tit
      (+video.minAgeRestriction <1 || +video.minAgeRestriction > 18 ||video.publicationDate !== "string") 
       errors2.push({message: 'error ', field: 'field'})
      
-  }
+  } else {
    res.sendStatus(204)
+  }
  })
 
 app.delete('/videos/:id', (req: Request, res: Response) => {
