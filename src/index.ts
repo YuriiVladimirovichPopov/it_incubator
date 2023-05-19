@@ -40,7 +40,7 @@ const db: DB = {
   videos: [
   {
     "id": 0,
-    "title": "Nadejda",
+    "title": "string",
     "author": "string",
     "canBeDownloaded": false,
     "minAgeRestriction": null,
